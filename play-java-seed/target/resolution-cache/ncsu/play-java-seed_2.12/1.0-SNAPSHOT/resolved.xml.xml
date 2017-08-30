@@ -4,7 +4,7 @@
 		module="play-java-seed_2.12"
 		revision="1.0-SNAPSHOT"
 		status="integration"
-		publication="20170828141755"
+		publication="20170829175836"
 	>
 		<description>
 		play-java-seed
@@ -52,6 +52,10 @@
 		<dependency org="com.typesafe.play" name="play-akka-http-server_2.12" rev="2.6.3" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-guice_2.12" rev="2.6.3" conf="compile->default(compile)"/>
 		<dependency org="com.typesafe.play" name="play-java-jdbc_2.12" rev="2.6.3" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-ehcache_2.12" rev="2.6.3" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-cache_2.12" rev="2.6.3" conf="compile->default(compile)"/>
+		<dependency org="com.typesafe.play" name="play-jcache_2.12" rev="2.6.3" conf="compile->default(compile)"/>
+		<dependency org="org.jsr107.ri" name="cache-annotations-ri-guice" rev="1.0.0" conf="compile->default(compile)"/>
 		<dependency org="org.xerial" name="sqlite-jdbc" rev="3.8.11.2" conf="compile->default(compile)"/>
 	</dependencies>
 </ivy-module>

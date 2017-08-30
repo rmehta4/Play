@@ -9,6 +9,10 @@ scalaVersion := "2.12.2"
 
 libraryDependencies += guice
 libraryDependencies += javaJdbc
+libraryDependencies += ehcache
+libraryDependencies += cacheApi
+libraryDependencies += jcache
+libraryDependencies += "org.jsr107.ri" % "cache-annotations-ri-guice" % "1.0.0"
 libraryDependencies += "org.xerial" % "sqlite-jdbc" % "3.8.11.2"
 
 
