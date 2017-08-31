@@ -33,7 +33,7 @@ public class DatabaseService{
        return CompletableFuture.supplyAsync(() -> {
            return db.withConnection(connection -> {
                Statement stmt = connection.createStatement();
-               stmt.execute("insert into Location values('"+result.get("username")+"','"+result.get("timestamp")+"','"+result.get("latitude")+"','"+result.get("longitude")+"')");
+               stmt.execute("insert into Location values('"+result.get("username")+"','"+result.get("timestamp")+"','"+result.get("latitude")+"','"+result.get("longitude")+"','"+result.get("distance")+"','"+result.get("active")+"')");
 	       stmt.close();
                return 1;
            });
@@ -46,7 +46,7 @@ public class DatabaseService{
            return db.withConnection(connection -> {
                ObjectNode param = Json.newObject();
     		ResultSet rs;
-    		PreparedStatement ps = connection.prepareStatement("select username,timestamp,latitude,longitude from Location where username=? limit 1");
+    		PreparedStatement ps = connection.prepareStatement("select username,timestamp,latitude,longitude,distance,active from Location where username=? and active=1");
     		ps.setString(1,"\"" + username + "\"");
     		rs = ps.executeQuery();
     		while (rs.next() ) {
@@ -54,9 +54,24 @@ public class DatabaseService{
 			param.put("timestamp", rs.getString("timestamp").replace("\"", ""));
 			param.put("latitude", rs.getString("latitude").replace("\"", ""));
 			param.put("longitude", rs.getString("longitude").replace("\"", ""));
+			param.put("distance", rs.getDouble("distance"));
+			param.put("active", Integer.valueOf(rs.getString("active").replace("\"", "")));
                 return param;
    		 }
              return param;
+           });
+       });
+   }
+
+  public CompletionStage<Integer> deactivate(String username) {
+       return CompletableFuture.supplyAsync(() -> {
+           return db.withConnection(connection -> {
+                ResultSet rs;
+    		PreparedStatement ps = connection.prepareStatement("update Location set active=0 where username=? and active=1");
+    		ps.setString(1,"\"" + username + "\"");
+    		ps.executeUpdate();
+		ps.close();
+             return 1;
            });
        });
    }

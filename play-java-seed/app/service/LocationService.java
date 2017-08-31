@@ -1,9 +1,9 @@
 package service;
 
 public class LocationService{
-	private final static double AVERAGE_RADIUS_OF_EARTH_KM = 637100;
+	private final static double AVERAGE_RADIUS_OF_EARTH_METER = 637100;
 	
-	public int calculateDistanceInMeter(double userLat, double userLng,
+	public double calculateDistanceInMeter(double userLat, double userLng,
   		double venueLat, double venueLng) {
 
   	  double latDistance = Math.toRadians(userLat - venueLat);
@@ -15,7 +15,7 @@ public class LocationService{
 
    	 double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-   	 return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH_KM * c));
+   	 return (int) (Math.round(AVERAGE_RADIUS_OF_EARTH_METER * c));
 }
 
 }

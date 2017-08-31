@@ -45,25 +45,37 @@ public class HomeController extends Controller {
 	 param.put("latitude", requestData.get("latitude"));
 	 param.put("longitude", requestData.get("longitude"));	
          ObjectNode result = Json.newObject();
-         
+	 ObjectNode response = Json.newObject();
+         double totalDistance = 0.0;
 	 try
 	{
           result = databaseService.getLocation(requestData.get("username")).toCompletableFuture().get();
+	  if(result.size()==0) {
+		param.put("distance",0.0);
+		param.put("active",1);
+		databaseService.saveLocation(param);
+		response.put("totalDistance",0.0);
+		return ok(response);	
+         }else{
+	  databaseService.deactivate(requestData.get("username"));
+          totalDistance = Double.valueOf(result.get("distance").toString());
+          double distance = locationService.calculateDistanceInMeter(Double.valueOf(requestData.get("latitude").toString().replace("\"", "")),Double.valueOf(requestData.get("longitude").toString().replace("\"", "")),
+         Double.valueOf(result.get("latitude").toString().replace("\"", "")),Double.valueOf(result.get("longitude").toString().replace("\"", "")));
+          totalDistance += distance;
+	  param.put("distance",totalDistance);
+	  param.put("active",1);
+	  databaseService.saveLocation(param);
+	}
 	}
 	catch(InterruptedException ie){
 	}
 	catch(ExecutionException ee){
 	}
 
-         if(result.size()==0) {
-		databaseService.saveLocation(param);
-		result.put("latitude",requestData.get("latitude"));
-                result.put("longitude",requestData.get("longitude"));	
-         }
-         int distance = locationService.calculateDistanceInMeter(Double.valueOf(requestData.get("latitude").toString().replace("\"", "")),Double.valueOf(requestData.get("longitude").toString().replace("\"", "")),
-         Double.valueOf(result.get("latitude").toString().replace("\"", "")),Double.valueOf(result.get("longitude").toString().replace("\"", "")));
-	 result.put("distance",distance);
-         return ok(result);
+         
+         
+	 response.put("totalDistance",totalDistance);
+         return ok(response);
    }
 
 }
